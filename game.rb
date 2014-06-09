@@ -19,8 +19,8 @@ class Window < Gosu::Window
   attr_accessor :x, :y
 
   
-  HEIGHT = 640
-  WIDTH = 480
+  HEIGHT = 900
+  WIDTH = 600
 
   def initialize
     super WIDTH, HEIGHT, false
@@ -38,7 +38,8 @@ class Window < Gosu::Window
     @task1 = CircleImage.new(self, Circle.new(@radius), false),
     @task2 = CircleImage.new(self, Circle.new(@radius), false),
     @task3 = CircleImage.new(self, Circle.new(@radius), false),
-    @task4 = CircleImage.new(self, Circle.new(@radius), false)
+    @task4 = CircleImage.new(self, Circle.new(@radius), false),
+    @task5 = CircleImage.new(self, Circle.new(@radius), false)
     ]
   end
 

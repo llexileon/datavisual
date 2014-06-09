@@ -4,18 +4,19 @@ class CircleImage < Gosu::Image
 
 	def initialize(window, source, tileable)
 		@color = color_picker
+		@x = rand(1..500)
+		@y = rand(1..600)
+		@speed_x = rand(0..1)
+		@speed_y = rand(1..4)
 		super
 	end
 
 	def move!
-	    @x ||= rand(1..400)
-		@y ||= rand(1..400)
+		@x += @speed_x
+		@y += @speed_y 
 
-		@x += 1
-		@y += 2
-
-		@x %= 640
-        @y %= 480
+		@x %= 600
+        @y %= 900
 	end
 
 	def color_picker
