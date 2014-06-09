@@ -20,17 +20,11 @@ class Window < Gosu::Window
 
   
   HEIGHT = 900
-  WIDTH = 600
+  WIDTH = 900
 
   def initialize
     super WIDTH, HEIGHT, false
     generate_tasks
-    # @circles = Array.new [
-    # @task1 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
-    # @task2 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
-    # @task3 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
-    # @task4 = Gosu::Image.new(self, Circle.new(rand(20..80)), false)
-    # ]
   end
 
   def generate_tasks
@@ -45,22 +39,30 @@ class Window < Gosu::Window
 
 	def draw 
     # background color #
-    color = Gosu::Color::WHITE
+    color = Gosu::Color::BLACK
     draw_quad 0, 0, color, WIDTH, 0, color, WIDTH, HEIGHT, color, 0, HEIGHT, color
-
+    # tasks #
     @tasks.each { |task| task.draw_rot task.x, task.y, 70, 90, 0.5, 0.5, 1, 1, task.color }
-
-    # # tasks #
-    # @task1.draw_rot @task1.x, @task1.y, 70, 90, 0.5, 0.5, 1, 1, Gosu::Color::BLUE
-    # @task2.draw_rot @task2.x, @task2.y, 60, 90, 0.5, 0.5, 1, 1, Gosu::Color::FUCHSIA
-    # @task3.draw_rot @task3.x, @task3.y, 50, 90, 0.5, 0.5, 1, 1, Gosu::Color::YELLOW
-    # @task4.draw_rot @task4.x, @task4.y, 40, 90, 0.5, 0.5, 1, 1, Gosu::Color::GREEN
 	end
 
   def update
+    # detect_collisions
     @tasks.each { |task| task.move! }
   end
 
+  def collision?(object_1, object_2)
+      hitbox_1, hitbox_2 = object_1.hitbox, object_2.hitbox
+      common_x = hitbox_1[:x] & hitbox_2[:x]
+      common_y = hitbox_1[:y] & hitbox_2[:y]
+      common_x.size > 0 && common_y.size > 0 
+  end
+
+  def detect_collisions
+      if collision?(@task1, @task2)
+          @counter = 1
+          puts "bump #{@counter += 1}"
+      end
+  end
 
 
   def needs_cursor?
