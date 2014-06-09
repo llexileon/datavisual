@@ -14,20 +14,22 @@ require './lib/circle.rb'
 # # # # # # # # # # # # #
 
 class Window < Gosu::Window
+  
+  HEIGHT = 640
+  WIDTH = 480
+
   def initialize
-    super 640, 480, false
-    @img = Gosu::Image.new(self, Circle.new(200), false)
-  end
+    super WIDTH, HEIGHT, false
+    @img = Gosu::Image.new(self, Circle.new(50), false)
+  end  
 
 	def draw 
-		@img.draw 0, 0, 0
+		@img.draw_rot WIDTH/2, HEIGHT/2, 1, 90, 0.5, 0.5, 1, 1, Gosu::Color::BLUE
 	end
 
-	
-
-  # def needs_cursor?
-  #   true
-  # end
+  def needs_cursor?
+    true
+  end
 end
 
 window = Window.new
