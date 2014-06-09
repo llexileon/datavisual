@@ -2,6 +2,7 @@
 
 require 'gosu'
 require './lib/circle.rb'
+require './lib/circle_image.rb'
 
 # # # # # # # # # # # # #
 # Web request notes 
@@ -14,17 +15,30 @@ require './lib/circle.rb'
 # # # # # # # # # # # # #
 
 class Window < Gosu::Window
+
+  attr_accessor :x, :y
+
   
   HEIGHT = 640
   WIDTH = 480
 
   def initialize
     super WIDTH, HEIGHT, false
-    @circles = Array.new [
-    @task1 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
-    @task2 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
-    @task3 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
-    @task4 = Gosu::Image.new(self, Circle.new(rand(20..80)), false)
+    generate_tasks
+    # @circles = Array.new [
+    # @task1 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
+    # @task2 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
+    # @task3 = Gosu::Image.new(self, Circle.new(rand(20..80)), false),
+    # @task4 = Gosu::Image.new(self, Circle.new(rand(20..80)), false)
+    # ]
+  end
+
+  def generate_tasks
+        @tasks = Array.new [
+    @task1 = CircleImage.new(self, Circle.new(rand(20..80)), false),
+    @task2 = CircleImage.new(self, Circle.new(rand(20..80)), false),
+    @task3 = CircleImage.new(self, Circle.new(rand(20..80)), false),
+    @task4 = CircleImage.new(self, Circle.new(rand(20..80)), false)
     ]
   end
 
@@ -33,14 +47,19 @@ class Window < Gosu::Window
     color = Gosu::Color::WHITE
     draw_quad 0, 0, color, WIDTH, 0, color, WIDTH, HEIGHT, color, 0, HEIGHT, color
 
-    # @circles.each { |q| q.draw_rot @circle_x, @circle_y, 70, 90, 0.5, 0.5, 1, 1, Gosu::Color::BLUE }
+    @tasks.each { |task| task.draw_rot task.x, task.y, 70, 90, 0.5, 0.5, 1, 1, task.color_picker }
 
-    # tasks #
-    @task1.draw_rot WIDTH/2, HEIGHT/3, 70, 90, 0.5, 0.5, 1, 1, Gosu::Color::BLUE
-    @task2.draw_rot WIDTH/4, HEIGHT/3, 60, 90, 0.5, 0.5, 1, 1, Gosu::Color::FUCHSIA
-    @task3.draw_rot WIDTH/2, HEIGHT/6, 50, 90, 0.5, 0.5, 1, 1, Gosu::Color::YELLOW
-    @task4.draw_rot WIDTH/6, HEIGHT/5, 40, 90, 0.5, 0.5, 1, 1, Gosu::Color::GREEN
+    # # tasks #
+    # @task1.draw_rot @task1.x, @task1.y, 70, 90, 0.5, 0.5, 1, 1, Gosu::Color::BLUE
+    # @task2.draw_rot @task2.x, @task2.y, 60, 90, 0.5, 0.5, 1, 1, Gosu::Color::FUCHSIA
+    # @task3.draw_rot @task3.x, @task3.y, 50, 90, 0.5, 0.5, 1, 1, Gosu::Color::YELLOW
+    # @task4.draw_rot @task4.x, @task4.y, 40, 90, 0.5, 0.5, 1, 1, Gosu::Color::GREEN
 	end
+
+  def update
+    @tasks.each { |task| task.move! }
+  end
+
 
 
   def needs_cursor?
@@ -49,7 +68,8 @@ class Window < Gosu::Window
 
   def button_down(id)
     close if id == Gosu::KbQ
-  end  
+  end 
+
 end
 
 window = Window.new
