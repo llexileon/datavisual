@@ -11,8 +11,8 @@ class CircleImage < Gosu::Image
 	    @x ||= rand(1..400)
 		@y ||= rand(1..400)
 
-		@x += 2
-		@y += 3
+		@x += 1
+		@y += 2
 
 		@x %= 640
         @y %= 480

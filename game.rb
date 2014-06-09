@@ -35,10 +35,10 @@ class Window < Gosu::Window
 
   def generate_tasks
         @tasks = Array.new [
-    @task1 = CircleImage.new(self, Circle.new(rand(20..80)), false),
-    @task2 = CircleImage.new(self, Circle.new(rand(20..80)), false),
-    @task3 = CircleImage.new(self, Circle.new(rand(20..80)), false),
-    @task4 = CircleImage.new(self, Circle.new(rand(20..80)), false)
+    @task1 = CircleImage.new(self, Circle.new(@radius), false),
+    @task2 = CircleImage.new(self, Circle.new(@radius), false),
+    @task3 = CircleImage.new(self, Circle.new(@radius), false),
+    @task4 = CircleImage.new(self, Circle.new(@radius), false)
     ]
   end
 
