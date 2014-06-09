@@ -1,6 +1,11 @@
 class CircleImage < Gosu::Image
 
-	attr_accessor :x, :y
+	attr_accessor :x, :y, :color
+
+	def initialize(window, source, tileable)
+		@color = color_picker
+		super
+	end
 
 	def move!
 	    @x ||= rand(1..400)
@@ -14,7 +19,7 @@ class CircleImage < Gosu::Image
 	end
 
 	def color_picker
-		@color = [  Gosu::Color::GRAY, Gosu::Color::WHITE,
+		@color = [  Gosu::Color::GRAY, Gosu::Color::BLACK,
 			Gosu::Color::AQUA, Gosu::Color::RED,
 			Gosu::Color::GREEN, Gosu::Color::BLUE,
 			Gosu::Color::YELLOW, Gosu::Color::FUCHSIA,

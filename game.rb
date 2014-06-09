@@ -47,7 +47,7 @@ class Window < Gosu::Window
     color = Gosu::Color::WHITE
     draw_quad 0, 0, color, WIDTH, 0, color, WIDTH, HEIGHT, color, 0, HEIGHT, color
 
-    @tasks.each { |task| task.draw_rot task.x, task.y, 70, 90, 0.5, 0.5, 1, 1, task.color_picker }
+    @tasks.each { |task| task.draw_rot task.x, task.y, 70, 90, 0.5, 0.5, 1, 1, task.color }
 
     # # tasks #
     # @task1.draw_rot @task1.x, @task1.y, 70, 90, 0.5, 0.5, 1, 1, Gosu::Color::BLUE
