@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby -w
 
 require 'gosu'
+require './lib/circle.rb'
 
 # # # # # # # # # # # # #
 # Web request notes 
@@ -14,12 +15,19 @@ require 'gosu'
 
 class Window < Gosu::Window
   def initialize
-    super 320, 240, false
+    super 640, 480, false
+    @img = Gosu::Image.new(self, Circle.new(200), false)
   end
 
-  def needs_cursor?
-    true
-  end
+	def draw 
+		@img.draw 0, 0, 0
+	end
+
+	
+
+  # def needs_cursor?
+  #   true
+  # end
 end
 
 window = Window.new
