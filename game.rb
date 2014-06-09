@@ -20,11 +20,14 @@ class Window < Gosu::Window
 
   def initialize
     super WIDTH, HEIGHT, false
-    @img = Gosu::Image.new(self, Circle.new(50), false)
-  end  
+    @task = Gosu::Image.new(self, Circle.new(50), false)
+  end
 
 	def draw 
-		@img.draw_rot WIDTH/2, HEIGHT/2, 1, 90, 0.5, 0.5, 1, 1, Gosu::Color::BLUE
+    @task.draw_rot WIDTH/2, HEIGHT/2, 1, 90, 0.5, 0.5, 1, 1, Gosu::Color::BLUE
+    @task.draw_rot WIDTH/3, HEIGHT/3, 1, 90, 0.5, 0.5, 1, 1, Gosu::Color::YELLOW
+    @task.draw_rot WIDTH/4, HEIGHT/4, 1, 90, 0.5, 0.5, 1, 1, Gosu::Color::RED
+    @task.draw_rot WIDTH/5, HEIGHT/5, 1, 90, 0.5, 0.5, 1, 1, Gosu::Color::GREEN
 	end
 
   def needs_cursor?
