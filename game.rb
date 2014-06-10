@@ -25,7 +25,7 @@ class Window < Gosu::Window
   def initialize
     super WIDTH, HEIGHT, false
     generate_tasks
-    @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
+    @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 35)
   end
 
   def generate_tasks
@@ -34,7 +34,12 @@ class Window < Gosu::Window
     @task2 = CircleImage.new(self, Circle.new, false),
     @task3 = CircleImage.new(self, Circle.new, false),
     @task4 = CircleImage.new(self, Circle.new, false),
-    @task5 = CircleImage.new(self, Circle.new, false)
+    @task5 = CircleImage.new(self, Circle.new, false),
+    @task6 = CircleImage.new(self, Circle.new, false),
+    @task7 = CircleImage.new(self, Circle.new, false),
+    @task8 = CircleImage.new(self, Circle.new, false),
+    @task9 = CircleImage.new(self, Circle.new, false),
+    @task10 = CircleImage.new(self, Circle.new, false)
     ]
   end
 

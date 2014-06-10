@@ -7,7 +7,7 @@ class CircleImage < Gosu::Image
 		@color = color_picker
 		@x = rand(100..500)
 		@y = rand(100..600)
-		@speed = 5
+		@speed = rand(1..5)
 		@angle = rand(50..150)
 	end
 
@@ -60,7 +60,7 @@ class CircleImage < Gosu::Image
 
 
 	def color_picker
-		@color = [  Gosu::Color::GRAY, Gosu::Color::WHITE,
+		@color = [  Gosu::Color::GRAY,
 			Gosu::Color::AQUA, Gosu::Color::RED,
 			Gosu::Color::GREEN, Gosu::Color::BLUE,
 			Gosu::Color::YELLOW, Gosu::Color::FUCHSIA,
