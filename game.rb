@@ -50,7 +50,7 @@ class Window < Gosu::Window
 	end
 
   def update
-    # detect_collisions
+    detect_collisions
     @tasks.each { |task| task.move! }
   end
 
@@ -61,18 +61,18 @@ class Window < Gosu::Window
       common_x.size > 0 && common_y.size > 0 
   end
 
-  # def detect_collisions
-  #   @tasks.combination(2).each do |pair|
-  #     if collision?(pair.first, pair.last)
-  #       angle = pair.first.angle + pair.last.angle
-  #       if(angle > 360)
-  #         angle -= 360
-  #       end
-  #       pair.first.angle = pair.last.angle
-  #       pair.last.angle = angle
-  #     end
-  #   end
-  # end
+  def detect_collisions
+    @tasks.combination(2).each do |pair|
+      if collision?(pair.first, pair.last)
+        angle = pair.first.angle + pair.last.angle
+        if(angle > 360)
+          angle -= 360
+        end
+        pair.first.angle = pair.last.angle
+        pair.last.angle = angle
+      end
+    end
+  end
 
 
   def needs_cursor?
