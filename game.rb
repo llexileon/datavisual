@@ -25,15 +25,16 @@ class Window < Gosu::Window
   def initialize
     super WIDTH, HEIGHT, false
     generate_tasks
+    @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
   end
 
   def generate_tasks
         @tasks = Array.new [
-    @task1 = CircleImage.new(self, Circle.new(@radius), false),
-    @task2 = CircleImage.new(self, Circle.new(@radius), false),
-    @task3 = CircleImage.new(self, Circle.new(@radius), false),
-    @task4 = CircleImage.new(self, Circle.new(@radius), false),
-    @task5 = CircleImage.new(self, Circle.new(@radius), false)
+    @task1 = CircleImage.new(self, Circle.new, false),
+    @task2 = CircleImage.new(self, Circle.new, false),
+    @task3 = CircleImage.new(self, Circle.new, false),
+    @task4 = CircleImage.new(self, Circle.new, false),
+    @task5 = CircleImage.new(self, Circle.new, false)
     ]
   end
 
@@ -42,7 +43,10 @@ class Window < Gosu::Window
     color = Gosu::Color::BLACK
     draw_quad 0, 0, color, WIDTH, 0, color, WIDTH, HEIGHT, color, 0, HEIGHT, color
     # tasks #
-    @tasks.each { |task| task.draw_rot task.x, task.y, 70, 90, 0.5, 0.5, 1, 1, task.color }
+       @tasks.each { |task| 
+      task.draw_rot task.x, task.y, 50, 90, 0.5, 0.5, 1, 1, task.color
+      @font.draw("#{task.angle.round(2)}", task.x - 10, task.y - 24, 50, 1, 1, Gosu::Color::WHITE) 
+    }
 	end
 
   def update
