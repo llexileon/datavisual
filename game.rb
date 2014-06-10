@@ -61,12 +61,18 @@ class Window < Gosu::Window
       common_x.size > 0 && common_y.size > 0 
   end
 
-  def detect_collisions
-      if collision?(@task1, @task2)
-          @counter = 1
-          puts "bump #{@counter += 1}"
-      end
-  end
+  # def detect_collisions
+  #   @tasks.combination(2).each do |pair|
+  #     if collision?(pair.first, pair.last)
+  #       angle = pair.first.angle + pair.last.angle
+  #       if(angle > 360)
+  #         angle -= 360
+  #       end
+  #       pair.first.angle = pair.last.angle
+  #       pair.last.angle = angle
+  #     end
+  #   end
+  # end
 
 
   def needs_cursor?
