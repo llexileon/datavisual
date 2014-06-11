@@ -1,6 +1,7 @@
 class CircleImage < Gosu::Image
 
-	attr_accessor :x, :y, :color, :angle, :speed
+	attr_accessor :x, :y, :color, :angle, :speed, :mass
+	attr_reader :radius
 
 	def initialize(window, source, tileable)
 		super
@@ -9,13 +10,9 @@ class CircleImage < Gosu::Image
 		@y = rand(100..600)
 		@speed = rand(1..5)
 		@angle = rand(50..150)
+		@mass = 10
+		@radius = self.width/2 
 	end
-
-	def hitbox
-		hitbox_x = ((@x - self.width/2).to_i..(@x + self.width/2.to_i)).to_a
-		hitbox_y = ((@y - self.width/2).to_i..(@y + self.width/2).to_i).to_a
-		{:x => hitbox_x, :y => hitbox_y}
-	end	
 
 	def speed_x	
 		Gosu.offset_x(angle, speed) 
