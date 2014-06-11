@@ -30,16 +30,16 @@ class Window < Gosu::Window
 
   def generate_tasks
     @tasks = Array.new [
-      @task1 = CircleImage.new(self, Circle.new, false),
-      @task2 = CircleImage.new(self, Circle.new, false),
-      @task3 = CircleImage.new(self, Circle.new, false),
-      @task4 = CircleImage.new(self, Circle.new, false),
-      @task5 = CircleImage.new(self, Circle.new, false),
-      @task6 = CircleImage.new(self, Circle.new, false),
-      @task7 = CircleImage.new(self, Circle.new, false),
-      @task8 = CircleImage.new(self, Circle.new, false),
-      @task9 = CircleImage.new(self, Circle.new, false),
-      @task10 = CircleImage.new(self, Circle.new, false)
+      @task1 = CircleImage.new(self, Circle.new, false,0),
+      @task2 = CircleImage.new(self, Circle.new, false,100),
+      @task3 = CircleImage.new(self, Circle.new, false,200),
+      @task4 = CircleImage.new(self, Circle.new, false,300),
+      @task5 = CircleImage.new(self, Circle.new, false,400),
+      @task6 = CircleImage.new(self, Circle.new, false,500),
+      @task7 = CircleImage.new(self, Circle.new, false,600),
+      @task8 = CircleImage.new(self, Circle.new, false,700),
+      @task9 = CircleImage.new(self, Circle.new, false,800),
+      @task10 = CircleImage.new(self, Circle.new, false,900)
     ]
   end
 
@@ -61,10 +61,10 @@ class Window < Gosu::Window
 
   def detect_collisions
     @tasks.combination(2).each do |firstBall, secondBall|
-      a_hit = firstBall.x + firstBall.radius + secondBall.radius > secondBall.x
-      b_hit = firstBall.x < secondBall.x + firstBall.radius + secondBall.radius
-      c_hit = firstBall.y + firstBall.radius + secondBall.radius > secondBall.y
-      d_hit = firstBall.y < secondBall.y + firstBall.radius + secondBall.radius
+      a_hit = firstBall.x + firstBall.radius + secondBall.radius >= secondBall.x
+      b_hit = firstBall.x <= secondBall.x + firstBall.radius + secondBall.radius
+      c_hit = firstBall.y + firstBall.radius + secondBall.radius >= secondBall.y
+      d_hit = firstBall.y <= secondBall.y + firstBall.radius + secondBall.radius
       
       if(a_hit && b_hit && c_hit && d_hit)
         distance = Math.sqrt(((firstBall.x - secondBall.x) * (firstBall.x - secondBall.x)) + ((firstBall.y - secondBall.y) * (firstBall.y - secondBall.y)))
