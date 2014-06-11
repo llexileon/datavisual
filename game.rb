@@ -3,16 +3,8 @@
 require 'gosu'
 require './lib/circle.rb'
 require './lib/circle_image.rb'
-
-# # # # # # # # # # # # #
-# Web request notes
-# # # # # # # # # # # # #
-# response = Net::HTTP.get_response("example.com","/?search=thing&format=json")
-# puts response.body //this must show the JSON contents
-# # # # # # # # # # # # #
-# require 'open-uri'
-# content = open("http://your_url.com").read
-# # # # # # # # # # # # #
+require 'httparty'
+require 'json'
 
 class Window < Gosu::Window
 
@@ -29,18 +21,14 @@ class Window < Gosu::Window
   end
 
   def generate_tasks
-    @tasks = Array.new [
-      @task1 = CircleImage.new(self, Circle.new, false,0),
-      @task2 = CircleImage.new(self, Circle.new, false,100),
-      @task3 = CircleImage.new(self, Circle.new, false,200),
-      @task4 = CircleImage.new(self, Circle.new, false,300),
-      @task5 = CircleImage.new(self, Circle.new, false,400),
-      @task6 = CircleImage.new(self, Circle.new, false,500),
-      @task7 = CircleImage.new(self, Circle.new, false,600),
-      @task8 = CircleImage.new(self, Circle.new, false,700),
-      @task9 = CircleImage.new(self, Circle.new, false,800),
-      @task10 = CircleImage.new(self, Circle.new, false,900)
-    ]
+    response = HTTParty.get('http://localhost:4567/example.json').body
+    tasks = JSON.parse(response)
+
+    @tasks = []
+
+    tasks['data'].each_with_index do |importance, index|
+      @tasks << CircleImage.new(self, Circle.new(importance * 10), false, index * 100)
+    end
   end
 
   def draw

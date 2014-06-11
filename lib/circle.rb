@@ -1,8 +1,8 @@
 class Circle
   attr_reader :columns, :rows
   
-  def initialize
-    radius = rand(15..65)
+  def initialize(radius)
+    radius = radius
     @columns = @rows = radius * 2
     lower_half = (0...radius).map do |y|
       x = Math.sqrt(radius**2 - y**2).round
