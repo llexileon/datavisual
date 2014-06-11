@@ -34,11 +34,11 @@ class Window < Gosu::Window
       @task2 = CircleImage.new(self, Circle.new, false),
       @task3 = CircleImage.new(self, Circle.new, false),
       @task4 = CircleImage.new(self, Circle.new, false),
-      # @task5 = CircleImage.new(self, Circle.new, false),
-      # @task6 = CircleImage.new(self, Circle.new, false),
-      # @task7 = CircleImage.new(self, Circle.new, false),
-      # @task8 = CircleImage.new(self, Circle.new, false),
-      # @task9 = CircleImage.new(self, Circle.new, false),
+      @task5 = CircleImage.new(self, Circle.new, false),
+      @task6 = CircleImage.new(self, Circle.new, false),
+      @task7 = CircleImage.new(self, Circle.new, false),
+      @task8 = CircleImage.new(self, Circle.new, false),
+      @task9 = CircleImage.new(self, Circle.new, false),
       @task10 = CircleImage.new(self, Circle.new, false)
     ]
   end
@@ -70,9 +70,20 @@ class Window < Gosu::Window
         distance = Math.sqrt(((firstBall.x - secondBall.x) * (firstBall.x - secondBall.x)) + ((firstBall.y - secondBall.y) * (firstBall.y - secondBall.y)))
         if (distance < firstBall.radius + secondBall.radius)
           # collision detected now what?
-          collisionPointX = (firstBall.x + secondBall.x)/2
-          collisionPointY = (firstBall.y + secondBall.y)/2
+          collisionPointX = ((firstBall.x * secondBall.radius) + (secondBall.x * firstBall.radius)) / (firstBall.radius + secondBall.radius)
+          collisionPointY = ((firstBall.y * secondBall.radius) + (secondBall.y * firstBall.radius)) / (firstBall.radius + secondBall.radius)
           puts "collision at #{collisionPointX},#{collisionPointY}"
+
+          newVelX1 = (firstBall.speed_x * (firstBall.mass - secondBall.mass) + (2 * secondBall.mass * secondBall.speed_x)) / (firstBall.mass + secondBall.mass)
+          newVelY1 = (firstBall.speed_y * (firstBall.mass - secondBall.mass) + (2 * secondBall.mass * secondBall.speed_y)) / (firstBall.mass + secondBall.mass)
+          newVelX2 = (secondBall.speed_x * (secondBall.mass - firstBall.mass) + (2 * firstBall.mass * firstBall.speed_x)) / (firstBall.mass + secondBall.mass)
+          newVelY2 = (secondBall.speed_y * (secondBall.mass - firstBall.mass) + (2 * firstBall.mass * firstBall.speed_y)) / (firstBall.mass + secondBall.mass)
+
+          firstBall.speed_x = newVelX1
+          firstBall.speed_y = newVelY1
+
+          secondBall.speed_x = newVelX2
+          secondBall.speed_y = newVelY2
         end
       end
     end

@@ -1,6 +1,6 @@
 class CircleImage < Gosu::Image
 
-	attr_accessor :x, :y, :color, :angle, :speed, :mass
+	attr_accessor :x, :y, :color, :speed, :mass, :speed_x, :speed_y
 	attr_reader :radius
 
 	def initialize(window, source, tileable)
@@ -9,19 +9,17 @@ class CircleImage < Gosu::Image
 		@x = rand(100..500)
 		@y = rand(100..600)
 		@speed = rand(1..5)
-		@angle = rand(50..150)
-		@mass = 10
+		angle = rand(50..150)
 		@radius = self.width/2 
+	    @mass = @radius
+		@speed_x = Gosu.offset_x(angle, speed) 
+		@speed_y = Gosu.offset_y(angle, speed) 
 	end
 
-	def speed_x	
-		Gosu.offset_x(angle, speed) 
+	def angle 
+		Gosu.angle(0, 0, speed_x, -speed_y)	
 	end
-
-	def speed_y 
-		Gosu.offset_y(angle, speed) 
-	end
-
+	
 	def move!
 		@x += speed_x
 		@y += speed_y 
@@ -48,11 +46,11 @@ class CircleImage < Gosu::Image
 	end
 
 	def y_bounce!
-		@angle = Gosu.angle(0, 0, speed_x, -speed_y)	
+		@speed_y = -@speed_y 
 	end
 
     def x_bounce!
-		@angle = Gosu.angle(0, 0, -speed_x, speed_y)	
+		@speed_x = -@speed_x 
 	end
 
 
