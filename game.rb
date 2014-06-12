@@ -8,6 +8,19 @@ require 'json'
 
 class Window < Gosu::Window
 
+  LOOKUP = {
+    1 => "", #Heart#
+    2 => "", #Film#
+    3 => "", #Drinks#
+    4 => "", #Concert#
+    5 => "", #Home#
+    6 => "", #School#
+    7 => "", #Office#
+    8 => "", #Travel#
+    9 => "", #Correspondence# 
+    10 => "", #Private"
+  }
+
   attr_accessor :x, :y
 
 
@@ -18,6 +31,10 @@ class Window < Gosu::Window
     super WIDTH, HEIGHT, false
     generate_tasks
     @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 35)
+    @symbol = {}
+    @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 18), offset_y: 10, offset_x: 7.5}
+    @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 30), offset_y: 18, offset_x: 11}
+    @symbol[:lg] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 42), offset_y: 22, offset_x: 14}
   end
 
   def generate_tasks
@@ -27,7 +44,7 @@ class Window < Gosu::Window
     @tasks = []
 
     tasks['data'].each_with_index do |importance, index|
-      @tasks << CircleImage.new(self, Circle.new(importance * 8), false, index * 125, index * 80, importance, importance)
+      @tasks << CircleImage.new(self, Circle.new(importance * 8), false, index * 125, index * 80, importance, importance/1.7, index + 1)
     end
   end
 
@@ -38,7 +55,13 @@ class Window < Gosu::Window
     # tasks #
     @tasks.each { |task|
       task.draw_rot task.x, task.y, 50, 90, 0.5, 0.5, 1, 1, task.color
-      @font.draw("#{task.angle.round(2)}", task.x - 10, task.y - 24, 50, 1, 1, Gosu::Color::WHITE)
+      size = case (task.radius / 8)
+      when 1..3 then :sm
+      when 4..6 then :md
+      when 7..10 then :lg
+      end
+
+      @symbol[size][:font].draw("#{LOOKUP[task.task_id.to_i]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::WHITE)
     }
   end
 
