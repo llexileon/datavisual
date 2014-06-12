@@ -1,11 +1,12 @@
 class CircleImage < Gosu::Image
 
 	attr_accessor :x, :y, :color, :speed, :mass, :speed_x, :speed_y
-	attr_reader :radius
+	attr_reader :radius, :color_hue
 
-	def initialize(window, source, tileable, start_x)
+	def initialize(window, source, tileable, start_x, color_hue)
 		super(window,source,tileable)
-		@color = color_picker
+		color = color_picker
+		color.hue = color_hue * 10
 		@x = start_x  
 		@y = rand(100..600)
 		@speed = rand(1..5)
@@ -55,7 +56,7 @@ class CircleImage < Gosu::Image
 
 
 	def color_picker
-		@color = [  Gosu::Color::GRAY,
+		@color = [
 			Gosu::Color::AQUA, Gosu::Color::RED,
 			Gosu::Color::GREEN, Gosu::Color::BLUE,
 			Gosu::Color::YELLOW, Gosu::Color::FUCHSIA,

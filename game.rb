@@ -27,7 +27,7 @@ class Window < Gosu::Window
     @tasks = []
 
     tasks['data'].each_with_index do |importance, index|
-      @tasks << CircleImage.new(self, Circle.new(importance * 10), false, index * 100)
+      @tasks << CircleImage.new(self, Circle.new(importance * 10), false, index * 150, importance)
     end
   end
 
