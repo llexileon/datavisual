@@ -2,5 +2,5 @@ require 'sinatra'
 require 'sinatra/json'
 
 get '/example.json' do
-	json data: [4,3,3,4,5,7,7,9,9,10]
+	json data: [2,3,4,5,6,7,8,9,10]
 end

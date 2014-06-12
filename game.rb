@@ -8,7 +8,7 @@ require 'json'
 
 class Window < Gosu::Window
 
-  LOOKUP = {
+  ICONMAP = {
     1 => "", #Heart#
     2 => "", #Film#
     3 => "", #Drinks#
@@ -61,7 +61,7 @@ class Window < Gosu::Window
       when 7..10 then :lg
       end
 
-      @symbol[size][:font].draw("#{LOOKUP[task.task_id.to_i]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::WHITE)
+      @symbol[size][:font].draw("#{ICONMAP[task.task_id.to_i]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::BLACK)
     }
   end
 
