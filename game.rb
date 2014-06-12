@@ -12,7 +12,7 @@ class Window < Gosu::Window
 
 
   HEIGHT = 900
-  WIDTH = 900
+  WIDTH = 1600
 
   def initialize
     super WIDTH, HEIGHT, false
@@ -27,7 +27,7 @@ class Window < Gosu::Window
     @tasks = []
 
     tasks['data'].each_with_index do |importance, index|
-      @tasks << CircleImage.new(self, Circle.new(importance * 10), false, index * 150, importance)
+      @tasks << CircleImage.new(self, Circle.new(importance * 8), false, index * 125, index * 80, importance, importance)
     end
   end
 

@@ -3,13 +3,13 @@ class CircleImage < Gosu::Image
 	attr_accessor :x, :y, :color, :speed, :mass, :speed_x, :speed_y
 	attr_reader :radius, :color_hue
 
-	def initialize(window, source, tileable, start_x, color_hue)
+	def initialize(window, source, tileable, start_x, start_y, color_hue, speed_input)
 		super(window,source,tileable)
 		color = color_picker
-		color.hue = color_hue * 10
+		color.hue = (color_hue * 11.6) + 105
 		@x = start_x  
-		@y = rand(100..600)
-		@speed = rand(1..5)
+		@y = start_y
+		speed = speed_input
 		angle = rand(50..150)
 		@radius = self.width/2 
 	    @mass = @radius
@@ -40,8 +40,8 @@ class CircleImage < Gosu::Image
 			x_bounce!
 		end
 
-		if @x > 900
-			@x = 900
+		if @x > 1600
+			@x = 1600
 			x_bounce!
 		end		
 	end
