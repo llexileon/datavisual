@@ -6,7 +6,7 @@ class CircleImage < Gosu::Image
 	def initialize(window, source, tileable, start_x, start_y, color_hue, speed_input, task_id)
 		super(window,source,tileable)
 		color = color_picker
-		color.hue = (color_hue * 6) + 150
+		color.hue = (color_hue * 9) + 321
 		@task_id = task_id
 		@x = start_x  
 		@y = start_y
