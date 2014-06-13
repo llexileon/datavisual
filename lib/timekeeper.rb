@@ -1,8 +1,7 @@
 module TimeKeeper
 
   def jsonToRubyDate(stringDate)
-    rubyDate = stringDate.split("T")[0].split("-").map do |dateUnit| dateUnit.to_i end
-    Time.new(*rubyDate)
+    DateTime.parse(stringDate)
   end
 
   def timeDiff(timeStart, timeEnd)
@@ -10,7 +9,7 @@ module TimeKeeper
   end
 
   def timeUsed(start)
-    Time.now - start
+    DateTime.now - start
   end
 
   def timeUsedPercentage(deadline, start)
@@ -18,3 +17,8 @@ module TimeKeeper
   end
 
 end
+
+# 2.1.1 :072 >   x
+#  => "2014-06-13T15:11:08.718Z" 
+# 2.1.1 :073 > y = x.scan(/([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})T([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})/)
+#  => [["2014", "06", "13", "15", "11", "08"]] 
