@@ -1,13 +1,14 @@
 class CircleImage < Gosu::Image
 
 	attr_accessor :x, :y, :color, :speed, :mass, :speed_x, :speed_y
-	attr_reader :radius, :color_hue, :task_id
+	attr_reader :radius, :color_hue, :category
 
-	def initialize(window, source, tileable, start_x, start_y, color_hue, speed_input, task_id)
+	def initialize(window, source, tileable, start_x, start_y, color_hue, speed_input, category)
 		super(window,source,tileable)
 		color = color_picker
 		color.hue = (color_hue * 9) + 321
-		@task_id = task_id
+		# @task_id = task_id
+		@category = category 
 		@x = start_x  
 		@y = start_y
 		speed = speed_input

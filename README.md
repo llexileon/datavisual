@@ -1,4 +1,4 @@
-datavisual
+DataVisual
 ==========
 
 - Task management software designed to parse real time productivity data into an interactive persistent enviroment.

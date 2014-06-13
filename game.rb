@@ -5,8 +5,11 @@ require './lib/circle.rb'
 require './lib/circle_image.rb'
 require 'httparty'
 require 'json'
+require './lib/timekeeper'
 
 class Window < Gosu::Window
+
+include TimeKeeper
 
   ICONMAP = {
     1 => "", #Heart#
@@ -15,10 +18,16 @@ class Window < Gosu::Window
     4 => "", #Concert#
     5 => "", #Home#
     6 => "", #School#
-    7 => "", #Office#
-    8 => "", #Travel#
-    9 => "", #Correspondence# 
-    10 => "", #Private"
+    7 => "", #Office#
+    8 => "", #Travel#
+    9 => "", #Correspondence# 
+    10 => "", #Garden#
+    11 => "", #Shopping#
+    12 => "", #Birthday#
+    13 => "", #Coffee"
+    14 => "", #Meal#
+    15 => "", #Health#
+    16 => "", #Call#
   }
 
   attr_accessor :x, :y
@@ -38,13 +47,16 @@ class Window < Gosu::Window
   end
 
   def generate_tasks
-    response = HTTParty.get('http://localhost:4567/example.json').body
+    response = HTTParty.get('http://datasymbiote.herokuapp.com/api/tasks').body
     tasks = JSON.parse(response)
 
     @tasks = []
 
-    tasks['data'].each_with_index do |importance, index|
-      @tasks << CircleImage.new(self, Circle.new(importance * 8), false, index * 125, index * 80, importance, importance/1.7, index + 1)
+    tasks.each_with_index do |task, index|
+      importance = task["importance"]
+      category = task["category"]
+      urgency = (timeUsedPercentage(jsonToRubyDate(task["deadline"]), jsonToRubyDate(task["created_at"])))/10
+      @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance/1.7, category)
     end
   end
 
@@ -61,7 +73,7 @@ class Window < Gosu::Window
       when 7..10 then :lg
       end
 
-      @symbol[size][:font].draw("#{ICONMAP[task.task_id.to_i]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::BLACK)
+      @symbol[size][:font].draw("#{ICONMAP[task.category]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::WHITE)
     }
   end
 
@@ -108,6 +120,25 @@ class Window < Gosu::Window
   def button_down(id)
     close if id == Gosu::KbQ
   end
+
+
+  # def jsonToRubyDate(stringDate)
+  #   rubyDate = stringDate.split("T")[0].split("-").map do |dateUnit| dateUnit.to_i end
+  #   Time.new(rubyDate[0], rubyDate[1], rubyDate[2])
+  # end
+
+  # def timeDiff(timeStart, timeEnd)
+  #   timeEnd - timeStart
+  # end
+
+  # def timeUsed(start)
+  #   Time.now - start
+  # end
+
+  # def timeUsedPercentage(deadline, start)
+  #   (timeUsed(start)/timeDiff(start, deadline)).round(1)*100
+  # end
+
 
 end
 
