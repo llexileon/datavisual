@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby -w
 
 require 'gosu'
+require 'json'
+require 'httparty'
+
 require './lib/circle.rb'
 require './lib/circle_image.rb'
-require 'httparty'
-require 'json'
 require './lib/timekeeper'
 
 class Window < Gosu::Window
@@ -39,7 +40,7 @@ include TimeKeeper
   def initialize
     super WIDTH, HEIGHT, false
     generate_tasks
-    @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 35)
+    @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
     @symbol = {}
     @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 18), offset_y: 10, offset_x: 7.5}
     @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 30), offset_y: 18, offset_x: 11}
@@ -75,6 +76,7 @@ include TimeKeeper
 
       @symbol[size][:font].draw("#{ICONMAP[task.category]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::WHITE)
     }
+    @font.draw("#{Time.now.strftime "%H:%m:%S"}", 50, 820, 100, 1, 1, Gosu::Color::WHITE)
   end
 
   def update
@@ -120,25 +122,6 @@ include TimeKeeper
   def button_down(id)
     close if id == Gosu::KbQ
   end
-
-
-  # def jsonToRubyDate(stringDate)
-  #   rubyDate = stringDate.split("T")[0].split("-").map do |dateUnit| dateUnit.to_i end
-  #   Time.new(rubyDate[0], rubyDate[1], rubyDate[2])
-  # end
-
-  # def timeDiff(timeStart, timeEnd)
-  #   timeEnd - timeStart
-  # end
-
-  # def timeUsed(start)
-  #   Time.now - start
-  # end
-
-  # def timeUsedPercentage(deadline, start)
-  #   (timeUsed(start)/timeDiff(start, deadline)).round(1)*100
-  # end
-
 
 end
 

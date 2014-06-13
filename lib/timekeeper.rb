@@ -2,7 +2,7 @@ module TimeKeeper
 
   def jsonToRubyDate(stringDate)
     rubyDate = stringDate.split("T")[0].split("-").map do |dateUnit| dateUnit.to_i end
-    Time.new(rubyDate[0], rubyDate[1], rubyDate[2])
+    Time.new(*rubyDate)
   end
 
   def timeDiff(timeStart, timeEnd)
