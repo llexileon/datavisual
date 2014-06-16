@@ -3,15 +3,17 @@ require './lib/colormap.rb'
 
 class CircleImage < Gosu::Image
 
-	attr_accessor :x, :y, :color, :speed, :mass, :speed_x, :speed_y
-	attr_reader :radius, :category, :importance, :id
+	attr_accessor :x, :y, :color, :speed, :mass, :speed_x, :speed_y, :title, :category
+	attr_reader :radius, :importance, :id, :frozen
 
 	include ColorMap
 
-	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id)
+	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title)
 		super(window,source,tileable)
 		@color = COLORMAP[urgency] 
 		@id = id
+		@frozen = false
+		@title = title
 		@category = category 
 		@x = start_x  
 		@y = start_y
@@ -73,6 +75,7 @@ class CircleImage < Gosu::Image
 	def update(data)
 		@category = data["category"]
 		@color = COLORMAP[@urgency]
+		@title = data["title"]
 	end
 
 	def hitbox

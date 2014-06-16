@@ -49,7 +49,7 @@ include ColorMap
       category = task["category"]
       id = task["id"]
       urgency = (timeUsedPercentage(jsonToRubyDate(task["deadline"]), jsonToRubyDate(task["created_at"]))).round(0) / 10
-      # urgency = [urgency, 11].min
+      title = task["title"]
       puts importance
       puts category
       puts urgency
@@ -57,7 +57,7 @@ include ColorMap
       puts jsonToRubyDate(task["created_at"])
       puts DateTime.now
 
-      @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id)
+      @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id, title)
     end
   end
 
@@ -75,15 +75,18 @@ include ColorMap
       end
 
       @symbol[size][:font].draw("#{ICONMAP[task.category]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::WHITE)
+      if task.frozen == true
+        @font.draw("#{task.title}", task.x, task.y, 100, 1, 1, Gosu::Color::WHITE)
+      end
     }
     @font.draw("#{Time.now.strftime "%H:%M:%S"}", 50, 820, 100, 1, 1, Gosu::Color::WHITE)
   end
 
   def update
     @count += 1
-    # detect_collisions
+    detect_collisions
     @tasks.each do|task|
-      refresh_data if @count % 600 == 0
+      refresh_data if @count % 200 == 0
       task.move!
     end
   end
@@ -103,7 +106,7 @@ include ColorMap
           # collision detected now what?
           collisionPointX = ((firstBall.x * secondBall.radius) + (secondBall.x * firstBall.radius)) / (firstBall.radius + secondBall.radius)
           collisionPointY = ((firstBall.y * secondBall.radius) + (secondBall.y * firstBall.radius)) / (firstBall.radius + secondBall.radius)
-          puts "collision at #{collisionPointX},#{collisionPointY}"
+          # puts "collision at #{collisionPointX},#{collisionPointY}"
 
           newVelX1 = (firstBall.speed_x * (firstBall.mass - secondBall.mass) + (2 * secondBall.mass * secondBall.speed_x)) / (firstBall.mass + secondBall.mass)
           newVelY1 = (firstBall.speed_y * (firstBall.mass - secondBall.mass) + (2 * secondBall.mass * secondBall.speed_y)) / (firstBall.mass + secondBall.mass)
@@ -145,7 +148,7 @@ include ColorMap
   def async(arg, callback)
     Thread.new {
       resp = HTTParty.get(arg)
-      callback.call(resp) 
+      callback.call(resp)
     }
   end
 
@@ -154,7 +157,7 @@ include ColorMap
       task_json = JSON.parse(response.body)
 
       @tasks.each do |circle|
-        task = task_json.find { |t| t['id'] == task.id }
+        task = task_json.find { |t| t['id'] == circle.id }
         circle.update(task)
       end
     }
