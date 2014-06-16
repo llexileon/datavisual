@@ -33,8 +33,8 @@ include ColorMap
     @count = 1
     @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
     @symbol = {}
-    @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 18), offset_y: 10, offset_x: 7.5}
-    @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 30), offset_y: 18, offset_x: 11}
+    @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 24), offset_y: 12, offset_x: 9}
+    @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 32), offset_y: 18, offset_x: 11}
     @symbol[:lg] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 42), offset_y: 22, offset_x: 14}
   end
 
@@ -77,8 +77,8 @@ include ColorMap
 
       @symbol[size][:font].draw("#{ICONMAP[task.category]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::WHITE)
       if task.frozen == true
-        @font.draw("#{task.title}", task.x, task.y, 100, 1, 1, Gosu::Color::WHITE)
-        @font.draw("#{task.description}", task.x, task.y + 25, 100, 1, 1, task.color)
+        @font.draw("#{task.title}", task.x + 45, task.y, 100, 1, 1, Gosu::Color::WHITE)
+        @font.draw("#{task.description}", task.x + 45, task.y + 25, 100, 1, 1, task.color)
       end
     }
     @font.draw("#{Time.now.strftime "%H:%M:%S"}", 50, 820, 100, 1, 1, Gosu::Color::WHITE)
@@ -88,7 +88,7 @@ include ColorMap
     @count += 1
     detect_collisions
     @tasks.each do|task|
-      refresh_data if @count % 200 == 0
+      refresh_data if @count % 300 == 0
       task.move!
     end
   end

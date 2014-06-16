@@ -4,7 +4,7 @@ require './lib/colormap.rb'
 class CircleImage < Gosu::Image
 
 	attr_accessor :x, :y, :color, :speed, :mass, :title, :category, :description
-	attr_reader :radius, :importance, :id, :frozen
+	attr_reader :radius, :importance, :id, :frozen, :urgency
 	attr_writer :speed_x, :speed_y
 
 	include ColorMap
@@ -88,6 +88,7 @@ class CircleImage < Gosu::Image
 		@category = data["category"]
 		@color = COLORMAP[@urgency]
 		@title = data["title"]
+		@description = data["description"]
 	end
 
 	def hitbox
