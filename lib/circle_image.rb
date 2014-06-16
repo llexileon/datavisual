@@ -1,23 +1,32 @@
+
+require './lib/colormap.rb'
+
 class CircleImage < Gosu::Image
 
 	attr_accessor :x, :y, :color, :speed, :mass, :speed_x, :speed_y
-	attr_reader :radius, :color_hue, :category
+	attr_reader :radius, :category, :importance, :id
 
-	def initialize(window, source, tileable, start_x, start_y, color_hue, speed_input, category)
+	include ColorMap
+
+	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id)
 		super(window,source,tileable)
-		color = color_picker
-		color.hue = (color_hue.to_i * 11.6) + 250
-		# @task_id = task_id
+		@color = COLORMAP[urgency] 
+		@id = id
 		@category = category 
 		@x = start_x  
 		@y = start_y
-		speed = speed_input
+		@urgency = urgency
+		speed = importance/1.7
 		angle = rand(50..150)
-		@radius = self.width/2 
+		@radius = self.width/2
 	    @mass = 10
 		@speed_x = Gosu.offset_x(angle, speed) 
 		@speed_y = Gosu.offset_y(angle, speed) 
 	end
+
+	# def scale
+	# 	@radius = importance
+	# end
 
 	def angle 
 		Gosu.angle(0, 0, speed_x, -speed_y)	
@@ -56,12 +65,9 @@ class CircleImage < Gosu::Image
 		@speed_x = -@speed_x 
 	end
 
-
-	def color_picker
-		@color = [
-			Gosu::Color::AQUA, Gosu::Color::RED,
-			Gosu::Color::GREEN, Gosu::Color::BLUE,
-			Gosu::Color::YELLOW, Gosu::Color::FUCHSIA,
-			Gosu::Color::CYAN ].sample
+	def update(data)
+		@category = data["category"]
+		@color = COLORMAP[@urgency]
 	end
+
 end

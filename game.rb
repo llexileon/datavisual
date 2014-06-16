@@ -1,35 +1,24 @@
 #!/usr/bin/env ruby -w
 
+#Gems
 require 'gosu'
 require 'json'
 require 'httparty'
 
+#Classes
 require './lib/circle.rb'
 require './lib/circle_image.rb'
+
+#Modules
 require './lib/timekeeper'
+require './lib/iconlegend'
+require './lib/colormap'
 
 class Window < Gosu::Window
 
 include TimeKeeper
-
-  ICONMAP = {
-    1 => "", #Heart#
-    2 => "", #Film#
-    3 => "", #Drinks#
-    4 => "", #Concert#
-    5 => "", #Home#
-    6 => "", #School#
-    7 => "", #Office#
-    8 => "", #Travel#
-    9 => "", #Correspondence# 
-    10 => "", #Garden#
-    11 => "", #Shopping#
-    12 => "", #Birthday#
-    13 => "", #Coffee"
-    14 => "", #Meal#
-    15 => "", #Health#
-    16 => "", #Call#
-  }
+include IconLegend
+include ColorMap
 
   attr_accessor :x, :y
 
@@ -40,6 +29,7 @@ include TimeKeeper
   def initialize
     super WIDTH, HEIGHT, false
     generate_tasks
+    @count = 1
     @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
     @symbol = {}
     @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 18), offset_y: 10, offset_x: 7.5}
@@ -56,8 +46,17 @@ include TimeKeeper
     tasks.each_with_index do |task, index|
       importance = task["importance"]
       category = task["category"]
-      urgency = (timeUsedPercentage(jsonToRubyDate(task["deadline"]), jsonToRubyDate(task["created_at"])))/10
-      @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance/1.7, category)
+      id = task["id"]
+      urgency = (timeUsedPercentage(jsonToRubyDate(task["deadline"]), jsonToRubyDate(task["created_at"]))).round(0) / 10
+
+      puts importance
+      puts category
+      puts urgency
+      puts jsonToRubyDate(task["deadline"])
+      puts jsonToRubyDate(task["created_at"])
+      puts DateTime.now
+
+      @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id)
     end
   end
 
@@ -80,12 +79,21 @@ include TimeKeeper
   end
 
   def update
-    detect_collisions
-    @tasks.each { |task| task.move! }
+    @count += 1
+    # detect_collisions
+    @tasks.each do|task|
+      refresh_data if @count % 600 == 0
+      task.move!
+    end
   end
 
   def detect_collisions
     @tasks.combination(2).each do |firstBall, secondBall|
+      puts firstBall.x
+      puts firstBall.radius
+      puts secondBall.radius
+      puts secondBall.x
+
       a_hit = firstBall.x + firstBall.radius + secondBall.radius >= secondBall.x
       b_hit = firstBall.x <= secondBall.x + firstBall.radius + secondBall.radius
       c_hit = firstBall.y + firstBall.radius + secondBall.radius >= secondBall.y
@@ -114,6 +122,23 @@ include TimeKeeper
     end
   end
 
+  def async(arg, callback)
+    Thread.new {
+      resp = HTTParty.get(arg)
+      callback.call(resp) 
+    }
+  end
+
+  def refresh_data
+    async 'http://datasymbiote.herokuapp.com/api/tasks', lambda { |response|
+      task_json = JSON.parse(response.body)
+
+      @tasks.each do |circle|
+        task = task_json.find { |t| t['id'] == task.id }
+        circle.update(task)
+      end
+    }
+  end
 
   def needs_cursor?
     true
