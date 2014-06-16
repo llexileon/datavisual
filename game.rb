@@ -48,7 +48,7 @@ include ColorMap
       category = task["category"]
       id = task["id"]
       urgency = (timeUsedPercentage(jsonToRubyDate(task["deadline"]), jsonToRubyDate(task["created_at"]))).round(0) / 10
-
+      # urgency = [urgency, 11].min
       puts importance
       puts category
       puts urgency
@@ -75,12 +75,12 @@ include ColorMap
 
       @symbol[size][:font].draw("#{ICONMAP[task.category]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::WHITE)
     }
-    @font.draw("#{Time.now.strftime "%H:%m:%S"}", 50, 820, 100, 1, 1, Gosu::Color::WHITE)
+    @font.draw("#{Time.now.strftime "%H:%M:%S"}", 50, 820, 100, 1, 1, Gosu::Color::WHITE)
   end
 
   def update
     @count += 1
-    # detect_collisions
+    detect_collisions
     @tasks.each do|task|
       refresh_data if @count % 600 == 0
       task.move!

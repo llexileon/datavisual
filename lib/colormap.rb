@@ -1,31 +1,18 @@
 module ColorMap
 
 	COLORMAP = {
-		10 => Gosu::Color::rgb(0, 219, 250),
-	    9 => Gosu::Color::rgb(1, 197, 250),
-	    8 => Gosu::Color::rgb(3, 175, 250),
-	    7 => Gosu::Color::rgb(4, 153, 250),
-	    6 => Gosu::Color::rgb(6, 131, 250),
-	    5 => Gosu::Color::rgb(6, 131, 250),
-	    4 => Gosu::Color::rgb(8, 109, 250),
-	    3 => Gosu::Color::rgb(11, 65, 250),
-	    2 => Gosu::Color::rgb(12, 43, 250),
-	    1 => Gosu::Color::rgb(14, 21, 250),
-	    0 => Gosu::Color::rgb(16, 0, 250)
-
+		-1 => Gosu::Color::GRAY,
+		10 => Gosu::Color::rgb(5, 247, 255),
+	    9 => Gosu::Color::rgb(7, 222, 249),
+	    8 => Gosu::Color::rgb(10, 197, 243),
+	    7 => Gosu::Color::rgb(13, 173, 237),
+	    6 => Gosu::Color::rgb(15, 148, 232),
+	    5 => Gosu::Color::rgb(18, 124, 226),
+	    4 => Gosu::Color::rgb(21, 99, 220),
+	    3 => Gosu::Color::rgb(23, 74, 215),
+	    2 => Gosu::Color::rgb(26, 50, 209),
+	    1 => Gosu::Color::rgb(29, 25, 203),
+	    0 => Gosu::Color::rgb(32, 1, 198)
 		}
 
 end
-
-
-		# 10 => Gosu::Color::rgb(54,98,198),
-	 #    9 => Gosu::Color::rgb(50,90,182),
-	 #    8 => Gosu::Color::rgb(50,90,182),
-	 #    7 => Gosu::Color::rgb(46,82,167),
-	 #    6 => Gosu::Color::rgb(41,75,152),
-	 #    5 => Gosu::Color::rgb(37,67,136),
-	 #    4 => Gosu::Color::rgb(33,60,121),
-	 #    3 => Gosu::Color::rgb(29,52,105),
-	 #    2 => Gosu::Color::rgb(25,44,90),
-	 #    1 => Gosu::Color::rgb(20,37,74),
-	 #    0 => Gosu::Color::rgb(16,29,59)
