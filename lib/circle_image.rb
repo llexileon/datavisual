@@ -3,14 +3,16 @@ require './lib/colormap.rb'
 
 class CircleImage < Gosu::Image
 
-	attr_accessor :x, :y, :color, :speed, :mass, :speed_x, :speed_y, :title, :category
+	attr_accessor :x, :y, :color, :speed, :mass, :title, :category, :description
 	attr_reader :radius, :importance, :id, :frozen
+	attr_writer :speed_x, :speed_y
 
 	include ColorMap
 
-	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title)
+	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title, description)
 		super(window,source,tileable)
 		@color = COLORMAP[urgency] 
+		@description = description
 		@id = id
 		@frozen = false
 		@title = title
@@ -36,6 +38,16 @@ class CircleImage < Gosu::Image
 	
 	def toggle_freeze!
 		@frozen = !@frozen
+	end
+
+	def speed_x
+		return -@speed_x if @frozen
+		@speed_x
+	end
+
+	def speed_y 
+		return -@speed_y if @frozen
+		@speed_y
 	end
 
 	def move!
