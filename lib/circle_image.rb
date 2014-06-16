@@ -32,7 +32,12 @@ class CircleImage < Gosu::Image
 		Gosu.angle(0, 0, speed_x, -speed_y)	
 	end
 	
+	def toggle_freeze!
+		@frozen = !@frozen
+	end
+
 	def move!
+		return if @frozen
 		@x += speed_x
 		@y += speed_y 
 
@@ -69,5 +74,11 @@ class CircleImage < Gosu::Image
 		@category = data["category"]
 		@color = COLORMAP[@urgency]
 	end
+
+	def hitbox
+  		hitbox_x = ((@x - self.width/2).to_i..(@x + self.width/2.to_i))
+  		hitbox_y = ((@y - self.width/2).to_i..(@y + self.width/2).to_i)
+  		{:x => hitbox_x, :y => hitbox_y}
+  	end
 
 end

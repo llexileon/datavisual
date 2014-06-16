@@ -29,6 +29,7 @@ include ColorMap
   def initialize
     super WIDTH, HEIGHT, false
     generate_tasks
+    @mouse_location = [mouse_x, mouse_y]
     @count = 1
     @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
     @symbol = {}
@@ -80,19 +81,16 @@ include ColorMap
 
   def update
     @count += 1
-    detect_collisions
+    # detect_collisions
     @tasks.each do|task|
       refresh_data if @count % 600 == 0
       task.move!
     end
   end
 
+
   def detect_collisions
     @tasks.combination(2).each do |firstBall, secondBall|
-      puts firstBall.x
-      puts firstBall.radius
-      puts secondBall.radius
-      puts secondBall.x
 
       a_hit = firstBall.x + firstBall.radius + secondBall.radius >= secondBall.x
       b_hit = firstBall.x <= secondBall.x + firstBall.radius + secondBall.radius
@@ -122,6 +120,28 @@ include ColorMap
     end
   end
 
+  def mouse_clicks?(task)
+      hitbox_1, = task.hitbox
+      hitbox_1[:x].cover?(mouse_x) && hitbox_1[:y].cover?(mouse_y)
+  end
+
+  def button_down(id)
+    close if id == Gosu::KbQ
+    if id == Gosu::MsLeft
+      detect_clicks
+    end
+  end
+
+
+  def detect_clicks
+    @tasks.each do |task|
+      if mouse_clicks?(task)
+        task.toggle_freeze!
+      end
+    end
+  end
+
+
   def async(arg, callback)
     Thread.new {
       resp = HTTParty.get(arg)
@@ -142,10 +162,6 @@ include ColorMap
 
   def needs_cursor?
     true
-  end
-
-  def button_down(id)
-    close if id == Gosu::KbQ
   end
 
 end
