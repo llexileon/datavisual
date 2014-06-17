@@ -4,15 +4,16 @@ require './lib/colormap.rb'
 class CircleImage < Gosu::Image
 
 	attr_accessor :x, :y, :color, :speed, :mass, :title, :category, :description
-	attr_reader :radius, :importance, :id, :frozen, :urgency
+	attr_reader :radius, :importance, :id, :frozen, :urgency, :deadline
 	attr_writer :speed_x, :speed_y
 
 	include ColorMap
 
-	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title, description)
+	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title, description, deadline)
 		super(window,source,tileable)
 		@color = COLORMAP[urgency] 
 		@description = description
+		@deadline = deadline
 		@id = id
 		@frozen = false
 		@title = title
@@ -23,7 +24,7 @@ class CircleImage < Gosu::Image
 		speed = importance/1.7
 		angle = rand(50..150)
 		@radius = self.width/2
-	    @mass = 10
+	    @mass = @radius
 		@speed_x = Gosu.offset_x(angle, speed) 
 		@speed_y = Gosu.offset_y(angle, speed) 
 	end

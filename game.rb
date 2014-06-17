@@ -51,6 +51,7 @@ include ColorMap
       urgency = (timeUsedPercentage(jsonToRubyDate(task["deadline"]), jsonToRubyDate(task["created_at"]))).round(0) / 10
       title = task["title"]
       description = task["description"]
+      deadline = jsonToRubyDate(task["deadline"])
       puts importance
       puts category
       puts urgency
@@ -58,7 +59,7 @@ include ColorMap
       puts jsonToRubyDate(task["created_at"])
       puts DateTime.now
 
-      @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id, title, description)
+      @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
     end
   end
 
@@ -79,6 +80,7 @@ include ColorMap
       if task.frozen == true
         @font.draw("#{task.title}", task.x + 45, task.y, 100, 1, 1, Gosu::Color::WHITE)
         @font.draw("#{task.description}", task.x + 45, task.y + 25, 100, 1, 1, task.color)
+        @font.draw("Starting in #{time_remaining(task.deadline)}", task.x + 45, task.y + 50, 100, 1, 1, task.color)
       end
     }
     @font.draw("#{Time.now.strftime "%H:%M:%S"}", 50, 820, 100, 1, 1, Gosu::Color::WHITE)
