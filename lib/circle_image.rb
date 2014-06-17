@@ -1,5 +1,6 @@
 
 require './lib/colormap.rb'
+require './lib/timekeeper'
 
 class CircleImage < Gosu::Image
 
@@ -8,11 +9,11 @@ class CircleImage < Gosu::Image
 	attr_writer :speed_x, :speed_y
 
 	include ColorMap
+	include TimeKeeper
 
 	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title, description, deadline)
 		super(window,source,tileable)
 		@color = COLORMAP[urgency] 
-		@overdue = true if urgency < 1
 		@description = description
 		@deadline = deadline
 		@id = id
@@ -30,19 +31,23 @@ class CircleImage < Gosu::Image
 		@speed_y = Gosu.offset_y(angle, speed) 
 	end
 
-	# def scale
-	# 	@radius = importance
-	# end
-
 	def angle 
 		Gosu.angle(0, 0, speed_x, -speed_y)	
 	end
 
 	def overdue?
-		if @overdue == true
+		if urgency < 0
 		Gosu::Color::rgb(242,48,65)
 		else 
 		@color 
+		end
+	end
+
+	def pastdue?
+		if urgency < 0
+		Gosu::Color::BLACK
+		else 
+		Gosu::Color::WHITE
 		end
 	end
 	
@@ -96,9 +101,11 @@ class CircleImage < Gosu::Image
 
 	def update(data)
 		@category = data["category"]
-		@color = COLORMAP[@urgency]
 		@title = data["title"]
 		@description = data["description"]
+		@deadline = jsonToRubyDate(data["deadline"])
+		@urgency = (timeUsedPercentage(jsonToRubyDate(data["deadline"]), jsonToRubyDate(data["created_at"]))).round(0) / 10
+		@color = COLORMAP[@urgency]
 	end
 
 	def hitbox

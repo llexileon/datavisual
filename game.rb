@@ -8,6 +8,7 @@ require 'httparty'
 #Classes
 require './lib/circle.rb'
 require './lib/circle_image.rb'
+require './lib/deleter.rb'
 
 #Modules
 require './lib/timekeeper'
@@ -43,8 +44,13 @@ include ColorMap
     tasks = JSON.parse(response)
 
     @tasks = []
+    @deleters = []
 
-    tasks.each_with_index do |task, index|
+    task_maker(tasks)
+  end
+
+  def task_maker(tasks)
+      tasks.each_with_index do |task, index|
       importance = task["importance"]
       category = task["category"]
       id = task["id"]
@@ -58,10 +64,10 @@ include ColorMap
       puts jsonToRubyDate(task["deadline"])
       puts jsonToRubyDate(task["created_at"])
       puts DateTime.now
-
       @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
     end
   end
+
 
   def draw
     # background color #
@@ -76,11 +82,12 @@ include ColorMap
       when 7..10 then :lg
       end
 
-      @symbol[size][:font].draw("#{ICONMAP[task.category]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, Gosu::Color::WHITE)
+      @symbol[size][:font].draw("#{ICONMAP[task.category]}", task.x - @symbol[size][:offset_x], task.y - @symbol[size][:offset_y], 50, 1, 1, task.pastdue?)
       if task.frozen == true
         @font.draw("#{task.title}", task.x + 45, task.y, 100, 1, 1, Gosu::Color::WHITE)
         @font.draw("#{task.description}", task.x + 45, task.y + 25, 100, 1, 1, task.color)
         @font.draw("#{due_in(task.deadline)}", task.x + 45, task.y + 50, 100, 1, 1, task.overdue?)
+        @deleters.each(&:draw)
       end
     }
     @font.draw("#{Time.now.strftime "%H:%M:%S"}", 50, 820, 100, 1, 1, Gosu::Color::WHITE)
@@ -90,7 +97,7 @@ include ColorMap
     @count += 1
     detect_collisions
     @tasks.each do|task|
-      refresh_data if @count % 300 == 0
+      refresh_data if @count % 600 == 0
       task.move!
     end
   end
@@ -144,6 +151,14 @@ include ColorMap
     @tasks.each do |task|
       if mouse_clicks?(task)
         task.toggle_freeze!
+        @deleters << Deleter.new(self, task)
+      end
+    end
+
+    @deleters.each do |deleter|
+      if mouse_clicks?(deleter)
+        @tasks.delete(deleter.task)
+        @deleters.delete(deleter)
       end
     end
   end
@@ -164,7 +179,27 @@ include ColorMap
         task = task_json.find { |t| t['id'] == circle.id }
         circle.update(task)
       end
+      
+      new_tasks = task_json.reject do |json|
+        @tasks.any? { |t| t.id == json['id'] }
+      end
     }
+      # new_tasks.each_with_index do |task, index|
+      # importance = task["importance"]
+      # category = task["category"]
+      # id = task["id"]
+      # urgency = (timeUsedPercentage(jsonToRubyDate(task["deadline"]), jsonToRubyDate(task["created_at"]))).round(0) / 10
+      # title = task["title"]
+      # description = task["description"]
+      # deadline = jsonToRubyDate(task["deadline"])
+      # puts importance
+      # puts category
+      # puts urgency
+      # puts jsonToRubyDate(task["deadline"])
+      # puts jsonToRubyDate(task["created_at"])
+      # puts DateTime.now
+      # @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
+      # end
   end
 
   def needs_cursor?
