@@ -3,7 +3,7 @@ require './lib/colormap.rb'
 
 class CircleImage < Gosu::Image
 
-	attr_accessor :x, :y, :color, :speed, :mass, :title, :category, :description
+	attr_accessor :x, :y, :color, :speed, :mass, :title, :category, :description, :overdue
 	attr_reader :radius, :importance, :id, :frozen, :urgency, :deadline
 	attr_writer :speed_x, :speed_y
 
@@ -12,6 +12,7 @@ class CircleImage < Gosu::Image
 	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title, description, deadline)
 		super(window,source,tileable)
 		@color = COLORMAP[urgency] 
+		@overdue = true if urgency < 1
 		@description = description
 		@deadline = deadline
 		@id = id
@@ -35,6 +36,14 @@ class CircleImage < Gosu::Image
 
 	def angle 
 		Gosu.angle(0, 0, speed_x, -speed_y)	
+	end
+
+	def overdue?
+		if @overdue == true
+		Gosu::Color::rgb(242,48,65)
+		else 
+		@color 
+		end
 	end
 	
 	def toggle_freeze!
