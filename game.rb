@@ -9,6 +9,7 @@ require 'httparty'
 require './lib/circle.rb'
 require './lib/circle_image.rb'
 require './lib/deleter.rb'
+require './lib/textfield.rb'
 
 #Modules
 require './lib/timekeeper'
@@ -30,9 +31,11 @@ include ColorMap
   def initialize
     super WIDTH, HEIGHT, false
     generate_tasks
+    self.caption = "DataBounce"
     @mouse_location = [mouse_x, mouse_y]
     @count = 1
     @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
+    @text_fields = Array.new(1) { |index| TextField.new(self, @font, 50, (30 + index * 50)) }
     @symbol = {}
     @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 24), offset_y: 12, offset_x: 9}
     @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 32), offset_y: 18, offset_x: 11}
@@ -67,6 +70,8 @@ include ColorMap
     # background color #
     color = Gosu::Color::BLACK
     draw_quad 0, 0, color, WIDTH, 0, color, WIDTH, HEIGHT, color, 0, HEIGHT, color
+    # text input #
+    @text_fields.each { |tf| tf.draw }
     # tasks #
     @tasks.each { |task|
       task.draw_rot task.x, task.y, 50, 90, 0.5, 0.5, 1, 1, task.color
@@ -139,12 +144,21 @@ include ColorMap
   end
 
   def button_down(id)
-    close if id == Gosu::KbQ
-    if id == Gosu::MsLeft
+    if id == Gosu::KbTab then
+      index = @text_fields.index(self.text_input) || -1
+      self.text_input = @text_fields[(index + 1) % @text_fields.size]
+    elsif id == Gosu::KbEscape then
+      if self.text_input then
+        self.text_input = nil
+      else
+        close
+      end
+    elsif id == Gosu::MsLeft
       detect_clicks
+      self.text_input = @text_fields.find { |tf| tf.under_point?(mouse_x, mouse_y) }
+      self.text_input.move_caret(mouse_x) unless self.text_input.nil?
     end
   end
-
 
   def detect_clicks
     @tasks.each do |task|
