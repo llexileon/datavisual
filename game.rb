@@ -40,7 +40,7 @@ include ColorMap
   end
 
   def generate_tasks
-    response = HTTParty.get('http://datasymbiote.herokuapp.com/api/tasks').body
+    response = HTTParty.get('http://datasymbiote.herokuapp.com/api/tasks?token=secret&email=joey@wolf.com').body
     tasks = JSON.parse(response)
 
     @tasks = []
@@ -58,12 +58,6 @@ include ColorMap
       title = task["title"]
       description = task["description"]
       deadline = jsonToRubyDate(task["deadline"])
-      puts importance
-      puts category
-      puts urgency
-      puts jsonToRubyDate(task["deadline"])
-      puts jsonToRubyDate(task["created_at"])
-      puts DateTime.now
       @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
     end
   end
@@ -99,6 +93,11 @@ include ColorMap
     @tasks.each do|task|
       refresh_data if @count % 600 == 0
       task.move!
+    end
+
+    if @new_tasks
+      task_maker(@new_tasks)
+      @new_tasks = nil
     end
   end
 
@@ -172,7 +171,7 @@ include ColorMap
   end
 
   def refresh_data
-    async 'http://datasymbiote.herokuapp.com/api/tasks', lambda { |response|
+    async 'http://datasymbiote.herokuapp.com/api/tasks?token=secret&email=joey@wolf.com', lambda { |response|
       task_json = JSON.parse(response.body)
 
       @tasks.each do |circle|
@@ -180,26 +179,11 @@ include ColorMap
         circle.update(task)
       end
       
-      new_tasks = task_json.reject do |json|
+      @new_tasks = task_json.reject do |json|
         @tasks.any? { |t| t.id == json['id'] }
       end
     }
-      # new_tasks.each_with_index do |task, index|
-      # importance = task["importance"]
-      # category = task["category"]
-      # id = task["id"]
-      # urgency = (timeUsedPercentage(jsonToRubyDate(task["deadline"]), jsonToRubyDate(task["created_at"]))).round(0) / 10
-      # title = task["title"]
-      # description = task["description"]
-      # deadline = jsonToRubyDate(task["deadline"])
-      # puts importance
-      # puts category
-      # puts urgency
-      # puts jsonToRubyDate(task["deadline"])
-      # puts jsonToRubyDate(task["created_at"])
-      # puts DateTime.now
-      # @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
-      # end
+    
   end
 
   def needs_cursor?

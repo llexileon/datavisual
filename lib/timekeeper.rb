@@ -48,11 +48,6 @@ module TimeKeeper
   end
 
   def timeUsedPercentage(deadline, start)
-  	puts "........"
-  	puts "time used #{timeUsed(start)}"
-  	puts "time diff #{timeDiff(start, deadline)}"
-  	puts "#{(timeUsed(start)/timeDiff(start, deadline)).round(1)*100}"
-
     if time_remaining(deadline) < 0
     	return -1
     else
