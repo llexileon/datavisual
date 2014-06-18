@@ -1,6 +1,8 @@
 # DataBounce
 
-- A task management visualization application, designed to parse real time productivity data into an interactive persistent enviroment using the [Gosu framework](http://code.google.com/p/gosu/) to render graphics and sound.
+- Task management visualization. 
+
+- An application designed to parse real time productivity data into an interactive persistent enviroment using the [Gosu framework](http://code.google.com/p/gosu/) to render graphics and sound.
 
 - My aim was to create an asthetically pleasing executive desk toy augmented with real time productivity data.
 
