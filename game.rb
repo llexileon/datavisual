@@ -30,13 +30,13 @@ include ColorMap
 
   def initialize
     super WIDTH, HEIGHT, false
-    generate_tasks
+    # generate_tasks
     self.caption = "DataBounce"
     @game_in_progress = false
     @mouse_location = [mouse_x, mouse_y]
     @count = 1
     @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
-    @text_fields = Array.new(1) { |index| TextField.new(self, @font, 50, (30 + index * 50)) }
+    @text_fields = Array.new(1) { |index| TextField.new(self, @font, 700, 425) }
     @symbol = {}
     @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 24), offset_y: 12, offset_x: 9}
     @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 32), offset_y: 18, offset_x: 11}
@@ -45,15 +45,17 @@ include ColorMap
 
   def login_screen
       @game_in_progress = false
+      @text_fields[0].text
   end
 
   def setup_game
+      puts @text_fields[0].text
       generate_tasks
       @game_in_progress = true
   end
 
   def generate_tasks
-    response = HTTParty.get('http://datasymbiote.herokuapp.com/api/tasks?token=secret&email=joey@wolf.com').body
+    response = HTTParty.get("http://datasymbiote.herokuapp.com/api/tasks?token=secret&email=#{@text_fields[0].text}").body
     tasks = JSON.parse(response)
 
     @tasks = []
@@ -81,9 +83,10 @@ include ColorMap
     color = Gosu::Color::BLACK
     draw_quad 0, 0, color, WIDTH, 0, color, WIDTH, HEIGHT, color, 0, HEIGHT, color
     unless @game_in_progress
-    @font.draw("DataBounce", 100, 170, 50, 3.0, 3.0, Gosu::Color::rgb(177, 220, 240))
-    @font.draw("press 'b' to Bounce", 215, 270, 50, 1, 1, Gosu::Color::rgb(48, 162, 242))
-    @font.draw("press 'q' to Quit", 215, 295, 50, 1, 1, Gosu::Color::rgb(48, 162, 242))  
+    @font.draw("DataBounce", 450, 270, 50, 3.0, 3.0, Gosu::Color::rgb(7, 229, 244))
+    @font.draw("Login with your Email below", 600, 370, 50, 1, 1, Gosu::Color::rgb(53, 77, 182))
+    @font.draw("Then press 'b' to Bounce", 600, 470, 50, 1, 1, Gosu::Color::rgb(53, 77, 182))
+    @font.draw("or press 'q' to Quit", 600, 495, 50, 1, 1, Gosu::Color::rgb(53, 77, 182))  
     # text input #
     @text_fields.each { |tf| tf.draw }
     end
@@ -121,6 +124,7 @@ include ColorMap
       # @game_in_progress = false
     end
     @count += 1
+    return unless @game_in_progress
     detect_collisions
     @tasks.each do|task|
       refresh_data if @count % 600 == 0
@@ -181,9 +185,12 @@ include ColorMap
         close
       end
     elsif id == Gosu::MsLeft
-      detect_clicks
+      if @game_in_progress 
+        detect_clicks
+      else
       self.text_input = @text_fields.find { |tf| tf.under_point?(mouse_x, mouse_y) }
       self.text_input.move_caret(mouse_x) unless self.text_input.nil?
+      end
     end
   end
 
@@ -212,7 +219,7 @@ include ColorMap
   end
 
   def refresh_data
-    async 'http://datasymbiote.herokuapp.com/api/tasks?token=secret&email=joey@wolf.com', lambda { |response|
+    async "http://datasymbiote.herokuapp.com/api/tasks?token=secret&email=#{@text_fields[0].text}", lambda { |response|
       task_json = JSON.parse(response.body)
 
       @tasks.each do |circle|

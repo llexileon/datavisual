@@ -26,7 +26,7 @@ class TextField < Gosu::TextInput
 	end
 
 	def filter(text)
-		text.upcase
+		text.downcase
 	end
 
 	def draw 
@@ -73,14 +73,12 @@ class TextField < Gosu::TextInput
     end    
 
 	def move_caret(mouse_x)
-	    # Test character by character
 	    1.upto(self.text.length) do |i|
 	      if mouse_x < x + @font.text_width(text[0...i]) then
 	        self.caret_pos = self.selection_start = i - 1;
 	        return
 	      end
 	    end
-	    # Default case: user must have clicked the right edge
 	    self.caret_pos = self.selection_start = self.text.length
 	end
 end
