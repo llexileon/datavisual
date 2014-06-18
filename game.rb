@@ -32,6 +32,7 @@ include ColorMap
     super WIDTH, HEIGHT, false
     generate_tasks
     self.caption = "DataBounce"
+    @game_in_progress = false
     @mouse_location = [mouse_x, mouse_y]
     @count = 1
     @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
@@ -40,6 +41,15 @@ include ColorMap
     @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 24), offset_y: 12, offset_x: 9}
     @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 32), offset_y: 18, offset_x: 11}
     @symbol[:lg] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 42), offset_y: 22, offset_x: 14}
+  end
+
+  def login_screen
+      @game_in_progress = false
+  end
+
+  def setup_game
+      generate_tasks
+      @game_in_progress = true
   end
 
   def generate_tasks
@@ -62,7 +72,7 @@ include ColorMap
       description = task["description"]
       deadline = jsonToRubyDate(task["deadline"])
       @tasks << CircleImage.new(self, Circle.new(((urgency * 3) + (importance * 3)) + 25), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
-    end
+      end
   end
 
 
@@ -70,8 +80,15 @@ include ColorMap
     # background color #
     color = Gosu::Color::BLACK
     draw_quad 0, 0, color, WIDTH, 0, color, WIDTH, HEIGHT, color, 0, HEIGHT, color
+    unless @game_in_progress
+    @font.draw("DataBounce", 100, 170, 50, 3.0, 3.0, Gosu::Color::rgb(177, 220, 240))
+    @font.draw("press 'b' to Bounce", 215, 270, 50, 1, 1, Gosu::Color::rgb(48, 162, 242))
+    @font.draw("press 'q' to Quit", 215, 295, 50, 1, 1, Gosu::Color::rgb(48, 162, 242))  
     # text input #
     @text_fields.each { |tf| tf.draw }
+    end
+    return unless @game_in_progress
+
     # tasks #
     @tasks.each { |task|
       task.draw_rot task.x, task.y, 50, 90, 0.5, 0.5, 1, 1, task.color
@@ -93,6 +110,16 @@ include ColorMap
   end
 
   def update
+    if button_down? Gosu::KbQ
+      close
+    end
+    if button_down? Gosu::KbB
+      setup_game unless @game_in_progress
+    end
+    if button_down? Gosu::KbL
+      login_screen unless @game_in_progress == false
+      # @game_in_progress = false
+    end
     @count += 1
     detect_collisions
     @tasks.each do|task|
