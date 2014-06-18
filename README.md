@@ -6,7 +6,7 @@
 
 ![Screenshot](https://raw.githubusercontent.com/llexileon/datavisual/master/assets/screen1.png)
 
-- This application pulls data from the [DataSymbiote](http://datasymbiote.herokuapp.com) API developed by Alex Wong and Joseph Wolf. You can create a free [DataSymbiote](http://datasymbiote.herokuapp.com) account in order to enter your own task list and priorities for DataBounce to render.
+- This application pulls data from the [DataSymbiote](http://datasymbiote.herokuapp.com) API developed by [Alex Wong](https://github.com/mazzastar) and [Joseph Wolf](https://github.com/josephwolf). You can create a free [DataSymbiote](http://datasymbiote.herokuapp.com) account in order to enter your own task list and priorities for DataBounce to render.
 
 # Usage
 
@@ -17,7 +17,7 @@
 
 # Controls
 
-* Enter DataSymbiote login on the title screen and click B to activate DataBounce
+* Enter [DataSymbiote](http://datasymbiote.herokuapp.com) login on the title screen and click B to activate DataBounce
 * L to return to Login Screen at any time
 * Click tasks to freeze them, simultaneously accessing title, description and urgency.
 * Q or ESC to quit
@@ -25,4 +25,4 @@
 
 # Thanks
 
-Special thanks to Alex Wong for his assistance with the necessary DateTime calculations.
+Special thanks to [Alex Wong](https://github.com/mazzastar) for his assistance with the necessary DateTime calculations.
