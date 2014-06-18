@@ -12,24 +12,26 @@ require './lib/deleter.rb'
 require './lib/textfield.rb'
 
 #Modules
+require './lib/audioengine'
 require './lib/timekeeper'
 require './lib/iconlegend'
 require './lib/colormap'
 
 class Window < Gosu::Window
 
+include AudioEngine
 include TimeKeeper
 include IconLegend
 include ColorMap
 
   attr_accessor :x, :y
 
-
   HEIGHT = 900
   WIDTH = 1600
 
   def initialize
     super WIDTH, HEIGHT, false
+    audio_engine
     # generate_tasks
     self.caption = "DataBounce"
     @game_in_progress = false
@@ -149,6 +151,7 @@ include ColorMap
       if(a_hit && b_hit && c_hit && d_hit)
         distance = Math.sqrt(((firstBall.x - secondBall.x) * (firstBall.x - secondBall.x)) + ((firstBall.y - secondBall.y) * (firstBall.y - secondBall.y)))
         if (distance < firstBall.radius + secondBall.radius)
+          @bounce_sample.play(10)
           # collision detected now what?
           collisionPointX = ((firstBall.x * secondBall.radius) + (secondBall.x * firstBall.radius)) / (firstBall.radius + secondBall.radius)
           collisionPointY = ((firstBall.y * secondBall.radius) + (secondBall.y * firstBall.radius)) / (firstBall.radius + secondBall.radius)
