@@ -1,9 +1,9 @@
 class TextField < Gosu::TextInput
 
-  INACTIVE_COLOR  = 0xcc666666
-  ACTIVE_COLOR    = 0xccff6666
+  INACTIVE_COLOR  = Gosu::Color::rgb(76, 1, 152)
+  ACTIVE_COLOR    = Gosu::Color::rgb(22, 178, 224)
   SELECTION_COLOR = 0xcc0000ff
-  CARET_COLOR     = 0xffffffff
+  CARET_COLOR     = Gosu::Color::rgb(0, 255, 255)
   PADDING = 5	
 
 	# attr_reader :x, :y,
@@ -38,9 +38,9 @@ class TextField < Gosu::TextInput
     end
 	    
     @window.draw_quad(x - PADDING,         y - PADDING,          background_color,
-                      x + width + PADDING, y - PADDING,          background_color,
+                      x + width + 250, y - PADDING,          background_color,
                       x - PADDING,         y + height + PADDING, background_color,
-                      x + width + PADDING, y + height + PADDING, background_color, 0)
+                      x + width + 250, y + height + PADDING, background_color, 0)
 
 	pos_x = x + @font.text_width(self.text[0...self.caret_pos])
     sel_x = x + @font.text_width(self.text[0...self.selection_start])  
@@ -68,7 +68,7 @@ class TextField < Gosu::TextInput
     end
 
     def under_point?(mouse_x, mouse_y)
-    	mouse_x > x - PADDING and mouse_x < x + width + PADDING and
+    	mouse_x > x - PADDING and mouse_x < x + width + 250 and
     	mouse_y > y - PADDING and mouse_y < y + height + PADDING
     end    
 

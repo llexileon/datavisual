@@ -36,7 +36,7 @@ include ColorMap
     @mouse_location = [mouse_x, mouse_y]
     @count = 1
     @font = Gosu::Font.new(self, "assets/victor-pixel.ttf", 40)
-    @text_fields = Array.new(1) { |index| TextField.new(self, @font, 700, 425) }
+    @text_fields = Array.new(1) { |index| TextField.new(self, @font, 460, 425) }
     @symbol = {}
     @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 24), offset_y: 12, offset_x: 9}
     @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 32), offset_y: 18, offset_x: 11}
@@ -83,10 +83,10 @@ include ColorMap
     color = Gosu::Color::BLACK
     draw_quad 0, 0, color, WIDTH, 0, color, WIDTH, HEIGHT, color, 0, HEIGHT, color
     unless @game_in_progress
-    @font.draw("DataBounce", 450, 270, 50, 3.0, 3.0, Gosu::Color::rgb(7, 229, 244))
-    @font.draw("Login with your Email below", 600, 370, 50, 1, 1, Gosu::Color::rgb(53, 77, 182))
-    @font.draw("Then press 'b' to Bounce", 600, 470, 50, 1, 1, Gosu::Color::rgb(53, 77, 182))
-    @font.draw("or press 'q' to Quit", 600, 495, 50, 1, 1, Gosu::Color::rgb(53, 77, 182))  
+    @font.draw("DataBounce", 450, 270, 50, 3.0, 3.0, Gosu::Color::WHITE)
+    @font.draw("Login below, press enter to confirm", 450, 370, 50, 1, 1, Gosu::Color::rgb(38, 128, 203))
+    @font.draw("Then press 'b' to Bounce", 450, 470, 50, 1, 1, Gosu::Color::rgb(38, 128, 203))
+    @font.draw("or press 'q' to Quit", 450, 495, 50, 1, 1, Gosu::Color::rgb(38, 128, 203))  
     # text input #
     @text_fields.each { |tf| tf.draw }
     end
@@ -178,6 +178,10 @@ include ColorMap
     if id == Gosu::KbTab then
       index = @text_fields.index(self.text_input) || -1
       self.text_input = @text_fields[(index + 1) % @text_fields.size]
+    elsif id == Gosu::KbReturn
+      if self.text_input then
+        self.text_input = nil
+      end
     elsif id == Gosu::KbEscape then
       if self.text_input then
         self.text_input = nil
