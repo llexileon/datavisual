@@ -58,7 +58,7 @@ include ColorMap
       title = task["title"]
       description = task["description"]
       deadline = jsonToRubyDate(task["deadline"])
-      @tasks << CircleImage.new(self, Circle.new(importance * 7 + 5), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
+      @tasks << CircleImage.new(self, Circle.new(((urgency * 3) + (importance * 3)) + 25), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
     end
   end
 

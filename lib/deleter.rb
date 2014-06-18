@@ -7,8 +7,8 @@ class Deleter #< Gosu::Image
 	end
 
 	def hitbox
-  		hitbox_x = ((@task.x + 45).to_i..(@task.x + 250.to_i))
-  		hitbox_y = ((@task.y + 85).to_i..(@task.y + 150).to_i)
+  		hitbox_x = ((@task.x + 45).to_i..(@task.x + 245.to_i))
+  		hitbox_y = ((@task.y + 85).to_i..(@task.y + 145).to_i)
   		{:x => hitbox_x, :y => hitbox_y}
   	end
 
