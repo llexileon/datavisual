@@ -44,6 +44,7 @@ include ColorMap
     @symbol[:sm] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 24), offset_y: 12, offset_x: 9}
     @symbol[:md] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 32), offset_y: 18, offset_x: 11}
     @symbol[:lg] = {font: Gosu::Font.new(self, "assets/fontawesome-webfont.ttf", 42), offset_y: 22, offset_x: 14}
+    @audio_icon = Gosu::Image.new(self, "assets/audioicon.png", false)
   end
 
   def login_screen
@@ -115,6 +116,9 @@ include ColorMap
       end
     }
     @font.draw("#{Time.now.strftime "%H:%M:%S"}", 50, 820, 100, 1, 1, Gosu::Color::WHITE)
+    if !@mute
+      @audio_icon.draw(1510, 824, 100, 0.2, 0.2)
+    end
   end
 
   def update
