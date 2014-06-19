@@ -15,14 +15,17 @@
     cd datavisual
     ./game.rb
 
+
 # Controls
 
 * Enter [DataSymbiote](http://datasymbiote.herokuapp.com) login on the title screen and click B to activate DataBounce
 * L to return to Login Screen at any time
-* Click tasks to freeze them, simultaneously accessing title, description and urgency.
+* Click tasks to freeze them, simultaneously accessing title, description and urgency. Click again to unfreeze.
 * Q or ESC to quit
-
+* M to mute / unmute audio
 
 # Thanks
 
-Special thanks to [Alex Wong](https://github.com/mazzastar) for his assistance with the necessary DateTime calculations.
+* Soundtrack from http://www.playonloop.com
+* Sound FX sourced from http://www.freesfx.co.uk/
+* Special thanks to [Alex Wong](https://github.com/mazzastar) for his assistance with the necessary DateTime calculations.
