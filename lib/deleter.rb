@@ -14,7 +14,7 @@ class Deleter #< Gosu::Image
 
   	def draw
   		if task.frozen
-  		@font.draw("Completed", @task.x + 45, @task.y + 75, 150, 1, 1, Gosu::Color::GRAY)
+  		@font.draw("Done?", @task.x + 45, @task.y + 75, 150, 1, 1, Gosu::Color::GRAY)
   		end
   	end
 

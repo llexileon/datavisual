@@ -4,16 +4,17 @@ require './lib/timekeeper'
 
 class CircleImage < Gosu::Image
 
-	attr_accessor :x, :y, :color, :speed, :mass, :title, :category, :description, :overdue
+	attr_accessor :x, :y, :color, :speed, :mass, :title, :category, :description, :overdue, :done
 	attr_reader :radius, :importance, :id, :frozen, :urgency, :deadline
 	attr_writer :speed_x, :speed_y
 
 	include ColorMap
 	include TimeKeeper
 
-	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title, description, deadline)
+	def initialize(window, source, tileable, start_x, start_y, urgency, importance, category, id, title, description, deadline, done)
 		super(window,source,tileable)
 		@color = COLORMAP[urgency] 
+		@done = done
 		@description = description
 		@deadline = deadline
 		@id = id
@@ -106,6 +107,7 @@ class CircleImage < Gosu::Image
 		@deadline = jsonToRubyDate(data["deadline"])
 		@urgency = (timeUsedPercentage(jsonToRubyDate(data["deadline"]), jsonToRubyDate(data["created_at"]))).round(0) / 10
 		@color = COLORMAP[@urgency]
+		@done = data["done"]
 	end
 
 	def hitbox

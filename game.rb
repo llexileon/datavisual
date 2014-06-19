@@ -76,7 +76,9 @@ include ColorMap
       title = task["title"]
       description = task["description"]
       deadline = jsonToRubyDate(task["deadline"])
-      @tasks << CircleImage.new(self, Circle.new(((urgency * 3) + (importance * 3)) + 25), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline)
+      done = task["done"]
+      @tasks << CircleImage.new(self, Circle.new(((urgency * 3) + (importance * 3)) + 25), false, index * 125, index * 80, urgency, importance, category, id, title, description, deadline, done)
+      @tasks.reject!(&:done)
       end
   end
 
@@ -96,7 +98,7 @@ include ColorMap
     return unless @game_in_progress
 
     # tasks #
-    @tasks.each { |task|
+    @tasks.reject(&:done).each { |task|
       task.draw_rot task.x, task.y, 50, 90, 0.5, 0.5, 1, 1, task.color
       size = case (task.radius / 8)
       when 1..3 then :sm
@@ -130,7 +132,10 @@ include ColorMap
     return unless @game_in_progress
     detect_collisions
     @tasks.each do|task|
-      refresh_data if @count % 600 == 0
+      if @count > 600
+        refresh_data 
+        @count = 0
+      end
       task.move!
     end
 
@@ -214,23 +219,39 @@ include ColorMap
     end
 
     @deleters.each do |deleter|
-      if mouse_clicks?(deleter)
-        @tasks.delete(deleter.task)
-        @deleters.delete(deleter)
+      @tasks.each do |task|
+        if mouse_clicks?(deleter)
+          @count = 0
+          put_done(deleter.task)
+          deleter.task.done = true
+          @tasks.delete(deleter.task)
+          @deleters.delete(deleter)
+        end
       end
     end
   end
 
 
-  def async(arg, callback)
+  def async_get(arg, callback)
     Thread.new {
       resp = HTTParty.get(arg)
       callback.call(resp)
     }
   end
 
+    def async_put(arg, data)
+    Thread.new {
+      resp = HTTParty.put(arg, data)
+    }
+  end
+
+  def put_done(task)
+    async_put("http://datasymbiote.herokuapp.com/api/tasks/#{task.id}?token=secret&email=#{@text_fields[0].text}", body: { task: { done: true } })    
+  end
+
+
   def refresh_data
-    async "http://datasymbiote.herokuapp.com/api/tasks?token=secret&email=#{@text_fields[0].text}", lambda { |response|
+    async_get "http://datasymbiote.herokuapp.com/api/tasks?token=secret&email=#{@text_fields[0].text}", lambda { |response|
       task_json = JSON.parse(response.body)
 
       @tasks.each do |circle|
