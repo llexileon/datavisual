@@ -205,6 +205,7 @@ include ColorMap
     @tasks.each do |task|
       if mouse_clicks?(task)
         task.toggle_freeze!
+        @freeze_sample.play
         @deleters << Deleter.new(self, task)
       end
     end
