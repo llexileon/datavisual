@@ -24,7 +24,7 @@ include TimeKeeper
 include IconLegend
 include ColorMap
 
-  attr_accessor :x, :y
+  attr_accessor :x, :y, :mute
 
   HEIGHT = 900
   WIDTH = 1600
@@ -34,6 +34,7 @@ include ColorMap
     audio_engine
     # generate_tasks
     self.caption = "DataBounce"
+    @mute == false
     @game_in_progress = false
     @mouse_location = [mouse_x, mouse_y]
     @count = 1
@@ -151,7 +152,7 @@ include ColorMap
       if(a_hit && b_hit && c_hit && d_hit)
         distance = Math.sqrt(((firstBall.x - secondBall.x) * (firstBall.x - secondBall.x)) + ((firstBall.y - secondBall.y) * (firstBall.y - secondBall.y)))
         if (distance < firstBall.radius + secondBall.radius)
-          @bounce_sample.play(10)
+          @bounce_sample.play(0.4) unless @mute == true
           # collision detected now what?
           collisionPointX = ((firstBall.x * secondBall.radius) + (secondBall.x * firstBall.radius)) / (firstBall.radius + secondBall.radius)
           collisionPointY = ((firstBall.y * secondBall.radius) + (secondBall.y * firstBall.radius)) / (firstBall.radius + secondBall.radius)
@@ -198,6 +199,8 @@ include ColorMap
       self.text_input = @text_fields.find { |tf| tf.under_point?(mouse_x, mouse_y) }
       self.text_input.move_caret(mouse_x) unless self.text_input.nil?
       end
+    elsif id == Gosu::KbM
+      toggle_mute!
     end
   end
 
@@ -205,7 +208,7 @@ include ColorMap
     @tasks.each do |task|
       if mouse_clicks?(task)
         task.toggle_freeze!
-        @freeze_sample.play
+        @freeze_sample.play unless @mute == true
         @deleters << Deleter.new(self, task)
       end
     end

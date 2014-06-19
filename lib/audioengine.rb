@@ -5,6 +5,16 @@ module AudioEngine
     foleyfx
   end
 
+  def toggle_mute!
+    @mute = !@mute
+    if @song.paused?
+      @song.play(looping = true)
+    else
+      @song.pause
+    end
+  end
+
+
   def soundtrack # Game Soundtrack
     @soundtrack = [] 
     @soundtrack << Gosu::Song.new("assets/audio/returningloop.mp3")
